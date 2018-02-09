@@ -1,0 +1,27 @@
+学习使用git时，本地仓库关联远程仓库时遇到的问题：
+在GitHub上创建账户后，需要设置ssh key(如果想采用ssh协议)。
+通过在本地git bash中运行命令：ssh-keygen -t rsa -C "weigonghuang@163.com"
+生成了两个问价id-rsa 和id_rsa.pub。其中id_rsa.pub是公钥，需要传递给github.
+但是，当使用git remote add origin git@github:weigonghuang/learngit.git关联远程仓库后，
+如果再用git push -u origin master推送本地仓库的内容到远程仓库时，当使用https协议时，会要求你每次都输入用户名和密码；
+而当选择ssh协议时，会报错：
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+经过百度，原来需要修改配置文件：
+用git config --local -l查看本地配置文件（当前本地仓库的配置文件）发现有个项目是：
+url=git@github.com:weigonghuang/learngit.git(当使用ssh协议时)
+
+而当使用https协议时是这样：url=https://github.com/weigonghuang/learngit.git.
+注意二者的区别！---》一个是.com:weigonghuang  一个是 .com/weigonghuang
+
+在本地仓库的.git/目录下，找到config文件，用notepad打开，将url=git@github.com:weigonghuang/learngit.git
+统一修改成：url=https://github.com/weigonghuang/learngit.git然后保存
+
+这样修改后，无论是用https 还是ssh都不需要再输入用户名和密码了，用git push 命令成功！
+
+
+在远程创建好仓库后，需要添加ssh
